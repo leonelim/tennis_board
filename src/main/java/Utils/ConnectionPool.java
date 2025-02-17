@@ -16,7 +16,8 @@ public class ConnectionPool {
         dataSource.setMaxOpenPreparedStatements(100);
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
-            statement.execute("CREATE TABLE Players (ID INTEGER PRIMARY KEY AUTO_INCREMENT, Name VARCHAR)");
+            statement.execute("CREATE TABLE Players (ID INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20) UNIQUE NOT NULL)");
+            statement.execute("CREATE TABLE Matches (ID INT PRIMARY KEY AUTO_INCREMENT, Player1 INT NOT NULL, Player2 INT NOT NULL, Winner INT NOT NULL, UNIQUE (Player1, Player2), FOREIGN KEY (Player1) REFERENCES Players(ID) ON DELETE CASCADE, FOREIGN KEY (Player2) REFERENCES Players(ID) ON DELETE CASCADE)");
         } catch (SQLException e) {
             throw new DatabaseCouldNotBeAccessed("The database could not resolve the request");
         }
