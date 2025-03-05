@@ -12,10 +12,4 @@ import java.io.IOException;
 @WebServlet("tennis")
 public class welcomeController extends HttpServlet {
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-
-        }
-    }
 }

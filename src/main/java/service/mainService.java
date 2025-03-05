@@ -1,11 +1,8 @@
 package service;
 
-import DTO.PlayerDTO;
+import dto.PlayerDTO;
 
 import java.util.List;
 
 public class mainService {
-    public List<PlayerDTO> getAll() {
-        Ma
-    }
 }
