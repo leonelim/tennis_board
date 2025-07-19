@@ -1,27 +1,46 @@
-import entity.Player;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import dao.MatchDAO;
+import dao.PlayerDAO;
+import model.entity.Match;
+import model.entity.Player;
+import model.nonpersistent.OngoingMatch;
 import org.junit.Test;
-import util.HibernateUtil;
+import service.OngoingMatchService;
+
+import java.util.List;
 
 public class PlayerTest {
+
     @Test
-    public void test() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
-            Player newPlayer = new Player(2, "Tajik");
-            session.merge(newPlayer);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+    public void PlayerDAOTest() {
+        PlayerDAO playerDAO = PlayerDAO.getInstance();
+        Player player = new Player();
+        player.setName("Joe");
+        playerDAO.savePlayerIfUnique(player);
+
+        Player player1 = playerDAO.findPlayer("Joe").get();
+        System.out.println(player1.getId() + player1.getName());
+    }
+
+    @Test
+    public void MatchDAOTest() {
+        OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
+        PlayerDAO playerDAO = PlayerDAO.getInstance();
+        MatchDAO matchDAO = MatchDAO.getInstance();
+        OngoingMatch ongoingMatch = new OngoingMatch();
+        Player player1 = new Player();
+        player1.setName("Joe");
+        Player player2 = new Player();
+        player2.setName("Nick");
+        playerDAO.savePlayerIfUnique(player1);
+        playerDAO.savePlayerIfUnique(player2);
+        player1 = playerDAO.findPlayer("Joe").get();
+        player2 = playerDAO.findPlayer("Nick").get();
+        ongoingMatch.setPlayer1(player1);
+        ongoingMatch.setPlayer2(player2);
+
+        ongoingMatchService.persistMatch(ongoingMatch, player1);
+
+        List<Match> matches = matchDAO.findMatches();
+        System.out.println(matches);
     }
 }

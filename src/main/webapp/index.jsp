@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+    <a href="/TennisBoard/new-match"><p>Start new match</p></a>
 </body>
 </html>
