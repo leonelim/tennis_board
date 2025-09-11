@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="/TennisBoard/css/style.css">
 </head>
 <body>
-    <a href="http://localhost:8080/TennisBoard"><p> Home </p></a>
-    <a href="http://localhost:8080/TennisBoard/matches?page=1&filter_by_name=1"><p>finished matches</p></a>
+    <a href="/TennisBoard"><p> Home page</p></a>
+    <a href="/TennisBoard/matches?page=1&filter_by_name=1"><p>finished matches</p></a>
     <p>
         ${match.getPlayer1().getName()} ${match.getScore1().getPoints()} ${match.getScore1().getGames()} ${match.getScore1().getSets()}
         <form action="/TennisBoard/match-score" method="post">

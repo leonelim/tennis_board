@@ -1,9 +1,6 @@
 package dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -34,18 +31,21 @@ public class MatchDAO {
         entityManager.close();
     }
 
-    public List<Match> findMatches() {
+    public List<Match> findMatches(int page) {
         EntityManager entityManager = PersistenceUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         List<Match> matches = null;
+        int pageSize = 2;
         try {
             transaction.begin();
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Match> criteriaQuery = builder.createQuery(Match.class);
             Root<Match> root = criteriaQuery.from(Match.class);
-            criteriaQuery.select(root);
-            Query query = entityManager.createQuery(criteriaQuery);
-            matches = query.getResultList();
+            CriteriaQuery<Match> select = criteriaQuery.select(root);
+            TypedQuery<Match> typedQuery = entityManager.createQuery(select);
+            typedQuery.setFirstResult(page * pageSize - pageSize);
+            typedQuery.setMaxResults(page * pageSize);
+            matches = typedQuery.getResultList();
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {

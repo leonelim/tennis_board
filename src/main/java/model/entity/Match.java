@@ -3,7 +3,8 @@ package model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "matches")

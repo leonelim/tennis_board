@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.jsp.PageContext;
 import model.entity.Match;
+import org.apache.logging.log4j.Logger;
 import service.FinishedMatchesPersistenceService;
 
 import java.io.IOException;
@@ -15,12 +17,15 @@ import java.util.List;
 @WebServlet("/matches")
 public class FinishedMatchesController extends HttpServlet {
     FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getInstance();
+    Logger logger = util.LoggingUtil.getLogger();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int pageNumber = Integer.parseInt(req.getParameter("page"));
         String filterByPlayerName = req.getParameter("filter_by_player_name");
-        List<Match> matches = finishedMatchesPersistenceService.getMatches();
+        List<Match> matches = finishedMatchesPersistenceService.getMatches(pageNumber);
+        logger.warn(matches.isEmpty());
         req.setAttribute("matches", matches);
+        req.setAttribute("page", pageNumber);
         req.getRequestDispatcher("jsp/matches.jsp").forward(req, resp);
     }
 }

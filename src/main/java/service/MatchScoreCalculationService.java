@@ -17,9 +17,7 @@ public class MatchScoreCalculationService {
     OngoingMatchService ongoingMatchService = OngoingMatchService.getInstance();
 
     public boolean isGameOver(OngoingMatch ongoingMatch) {
-        if (ongoingMatch.getScore1().getSets() == 2) {
-            
-        }
+        return ongoingMatch.getScore1().getSets() == 2 || ongoingMatch.getScore2().getSets() == 2;
     }
     public void calculatePoints(UUID uuid, int pointWinnerId) {
         Optional<OngoingMatch> ongoingMatchOptional = ongoingMatchService.getOngoingMatch(uuid);
@@ -27,10 +25,10 @@ public class MatchScoreCalculationService {
             return;
         }
         OngoingMatch ongoingMatch = ongoingMatchOptional.get();
-        addPoint(ongoingMatch, pointWinnerId);
+        addPoint(ongoingMatch, pointWinnerId, uuid);
 
     }
-    public void addPoint(OngoingMatch ongoingMatch, int pointWinnerId) {
+    public void addPoint(OngoingMatch ongoingMatch, int pointWinnerId, UUID uuid) {
         PlayerScore winnerScore;
         PlayerScore opponentScore;
         if (ongoingMatch.getPlayer1().getId() == pointWinnerId) {
@@ -95,7 +93,7 @@ public class MatchScoreCalculationService {
             } else {
                 winner = ongoingMatch.getPlayer2();
             }
-            ongoingMatchService.persistMatch(ongoingMatch, winner);
+            ongoingMatchService.persistMatch(ongoingMatch, winner, uuid);
         }
     }
 }

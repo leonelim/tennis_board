@@ -14,7 +14,7 @@ public class FinishedMatchesPersistenceService {
     private FinishedMatchesPersistenceService() {}
 
     MatchDAO matchDAO = MatchDAO.getInstance();
-    public List<Match> getMatches() {
-        return matchDAO.findMatches();
+    public List<Match> getMatches(int page) {
+        return matchDAO.findMatches(page);
     }
 }

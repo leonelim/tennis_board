@@ -1,4 +1,0 @@
-CREATE TABLE matches(
-  ID INTEGER PRIMARY KEY,
-  NameOne 
-)

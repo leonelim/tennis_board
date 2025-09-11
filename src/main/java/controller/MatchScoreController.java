@@ -20,12 +20,18 @@ public class MatchScoreController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uuid = req.getParameter("uuid");
-        OngoingMatch ongoingMatch = ongoingMatchService.getOngoingMatch(UUID.fromString(uuid)).get();
+        String uuidStr = req.getParameter("uuid");
+        UUID uuid = UUID.fromString(uuidStr);
+        OngoingMatch ongoingMatch = ongoingMatchService.getOngoingMatch(uuid).get();
         // TODO make a page for wrong uuid
         req.setAttribute("match", ongoingMatch);
         req.setAttribute("uuid", uuid);
-        req.getRequestDispatcher("jsp/match-score.jsp").forward(req, resp);
+        if (matchScoreCalculatorService.isGameOver(ongoingMatch)) {
+            ongoingMatchService.deleteOngoingMatch(uuid);
+            req.getRequestDispatcher("jsp/match-score-finished.jsp").forward(req, resp);
+        } else {
+            req.getRequestDispatcher("jsp/match-score.jsp").forward(req, resp);
+        }
     }
 
     @Override
@@ -34,9 +40,6 @@ public class MatchScoreController extends HttpServlet {
         UUID uuid = UUID.fromString(uuidStr);
         int pointWinnerId = Integer.parseInt(req.getParameter("point_winner_id"));
         matchScoreCalculatorService.calculatePoints(uuid, pointWinnerId);
-        OngoingMatch ongoingMatch = ongoingMatchService.getOngoingMatch(uuid).get();
-        req.setAttribute("uuid", uuid);
-        req.setAttribute("match", ongoingMatch);
         resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
     }
 }

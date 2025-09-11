@@ -26,6 +26,9 @@ public class OngoingMatchService {
         OngoingMatch ongoingMatch = ongoingMatches.get(uuid);
         return Optional.ofNullable(ongoingMatch);
     }
+    public void deleteOngoingMatch(UUID uuid) {
+        ongoingMatches.remove(uuid);
+    }
 
     public void createMatchAndSaveToMemory(UUID uuid, String name1, String name2) {
         String[] names = {name1, name2};
@@ -44,7 +47,7 @@ public class OngoingMatchService {
         ongoingMatches.put(uuid, ongoingMatch);
     }
 
-    public void persistMatch(OngoingMatch ongoingMatch, Player winner) {
+    public void persistMatch(OngoingMatch ongoingMatch, Player winner, UUID uuid) {
         Match match = new Match();
         match.setPlayer1(ongoingMatch.getPlayer1());
         match.setPlayer2(ongoingMatch.getPlayer2());
