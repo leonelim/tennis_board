@@ -5,7 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import lombok.Getter;
 
-public class PersistenceUtil {
+ public class PersistenceUtil {
     @Getter
     private static final EntityManagerFactory entityManagerFactory = buildEntityManagerFactory();
     private static EntityManagerFactory buildEntityManagerFactory() {

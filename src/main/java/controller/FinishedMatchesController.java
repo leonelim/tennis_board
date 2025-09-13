@@ -25,7 +25,11 @@ public class FinishedMatchesController extends HttpServlet {
         List<Match> matches = finishedMatchesPersistenceService.getMatches(pageNumber);
         logger.warn(matches.isEmpty());
         req.setAttribute("matches", matches);
-        req.setAttribute("page", pageNumber);
+        int previousPage = pageNumber - 1;
+        int nextPage = pageNumber + 1;
+        req.setAttribute("pageNumber", pageNumber);
+        req.setAttribute("nextPage", nextPage);
+        req.setAttribute("previousPage", previousPage);
         req.getRequestDispatcher("jsp/matches.jsp").forward(req, resp);
     }
 }

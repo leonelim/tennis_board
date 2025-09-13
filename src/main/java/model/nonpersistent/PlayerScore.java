@@ -1,8 +1,11 @@
 package model.nonpersistent;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PlayerScore {
     // is a String so that we can display "AD"
     String points;

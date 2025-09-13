@@ -27,8 +27,15 @@
         <%
             }
         %>
-        page: ${page}
-        <a href="/TennisBoard/matches?page=${page + 1}&filter_by_name=1"><button type="button">next page</button></a>
+        <%
+            if (request.getAttribute("previousPage" < 1) {
+        %>
+            <a href="/TennisBoard/matches?page=${previousPage}&filter_by_name=1"><button type="button">next page</button></a>
+        <%
+            }
+        %>
+        <a href="/TennisBoard/matches?page=${nextPage}&filter_by_name=1"><button type="button">next page</button></a>
+        page: ${pageInt}
     </ul>
 </body>
 </html>
