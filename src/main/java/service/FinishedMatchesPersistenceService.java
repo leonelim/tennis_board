@@ -14,7 +14,10 @@ public class FinishedMatchesPersistenceService {
     private FinishedMatchesPersistenceService() {}
 
     MatchDAO matchDAO = MatchDAO.getInstance();
-    public List<Match> getMatches(int page) {
+    public synchronized List<Match> getMatches(int page) {
         return matchDAO.findMatches(page);
+    }
+    public Long getAmount() {
+        return matchDAO.countEntries();
     }
 }

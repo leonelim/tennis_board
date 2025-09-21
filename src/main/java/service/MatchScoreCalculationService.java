@@ -1,12 +1,10 @@
 package service;
 
-import dto.OngoingMatchDTO;
 import model.entity.Player;
 import model.nonpersistent.OngoingMatch;
 import model.nonpersistent.PlayerScore;
 
 import java.util.Optional;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
 public class MatchScoreCalculationService {
@@ -18,6 +16,24 @@ public class MatchScoreCalculationService {
 
     public boolean isGameOver(OngoingMatch ongoingMatch) {
         return ongoingMatch.getScore1().getSets() == 2 || ongoingMatch.getScore2().getSets() == 2;
+    }
+    public void endGame(UUID uuid, int winnerId) {
+        Optional<OngoingMatch> ongoingMatchOptional = ongoingMatchService.getOngoingMatch(uuid);
+        if (ongoingMatchOptional.isEmpty()) {
+            return;
+        }
+        OngoingMatch ongoingMatch = ongoingMatchOptional.get();
+        Player winner;
+        PlayerScore playerScore;
+        if (ongoingMatch.getPlayer1().getId() == winnerId) {
+            winner = ongoingMatch.getPlayer1();
+            playerScore = ongoingMatch.getScore1();
+        } else {
+            winner = ongoingMatch.getPlayer2();
+            playerScore = ongoingMatch.getScore2();
+        }
+        playerScore.setSets(2);
+        ongoingMatchService.persistMatchAndRemoveFromMemory(ongoingMatch, winner);
     }
     public void calculatePoints(UUID uuid, int pointWinnerId) {
         Optional<OngoingMatch> ongoingMatchOptional = ongoingMatchService.getOngoingMatch(uuid);
@@ -93,7 +109,7 @@ public class MatchScoreCalculationService {
             } else {
                 winner = ongoingMatch.getPlayer2();
             }
-            ongoingMatchService.persistMatch(ongoingMatch, winner, uuid);
+            ongoingMatchService.persistMatchAndRemoveFromMemory(ongoingMatch, winner);
         }
     }
 }

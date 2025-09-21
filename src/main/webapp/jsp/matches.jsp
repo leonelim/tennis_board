@@ -9,6 +9,8 @@
 </head>
 <body>
     <a href="/TennisBoard"><p>Go to main page</p></a>
+    <a href="/TennisBoard/new-match"><p>Start new match</p></a>
+    <a href="/TennisBoard/matches?page=1&filter_by_name=1"><p>finished matches</p></a>
     <ul>
         <%
         List<Match> matches = (List<Match>) request.getAttribute("matches");
@@ -28,14 +30,21 @@
             }
         %>
         <%
-            if (request.getAttribute("previousPage" < 1) {
+            if ((Integer) request.getAttribute("previousPage") > 0) {
         %>
-            <a href="/TennisBoard/matches?page=${previousPage}&filter_by_name=1"><button type="button">next page</button></a>
+            <a href="/TennisBoard/matches?page=${previousPage}&filter_by_name=1"><button type="button">previous page</button></a>
         <%
             }
         %>
-        <a href="/TennisBoard/matches?page=${nextPage}&filter_by_name=1"><button type="button">next page</button></a>
-        page: ${pageInt}
+        <%
+            if ((Integer) request.getAttribute("pageNumber") < ((Long) request.getAttribute("amount") + 1) / 2) {
+        %>
+            <a href="/TennisBoard/matches?page=${nextPage}&filter_by_name=1"><button type="button">next page</button></a>
+        <%
+            }
+        %>
+        <br>
+        page: ${pageNumber}
     </ul>
 </body>
 </html>

@@ -23,8 +23,10 @@ public class FinishedMatchesController extends HttpServlet {
         int pageNumber = Integer.parseInt(req.getParameter("page"));
         String filterByPlayerName = req.getParameter("filter_by_player_name");
         List<Match> matches = finishedMatchesPersistenceService.getMatches(pageNumber);
+        Long amount = finishedMatchesPersistenceService.getAmount();
         logger.warn(matches.isEmpty());
         req.setAttribute("matches", matches);
+        req.setAttribute("amount", amount);
         int previousPage = pageNumber - 1;
         int nextPage = pageNumber + 1;
         req.setAttribute("pageNumber", pageNumber);

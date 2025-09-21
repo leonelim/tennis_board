@@ -54,15 +54,15 @@ public class PlayerDAO {
     public Optional<Player> findPlayer(String name) {
         EntityManager entityManager = PersistenceUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Player> players = null;
+        Player player = null;
         try {
             transaction.begin();
             CriteriaBuilder builder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Player> criteriaQuery = builder.createQuery(Player.class);
             Root<Player> root = criteriaQuery.from(Player.class);
             criteriaQuery.select(root).where(builder.equal(root.get("name"), name));
-            Query query = entityManager.createQuery(criteriaQuery);
-            players = query.getResultList();
+            TypedQuery<Player> typedQuery = entityManager.createQuery(criteriaQuery);
+            player = typedQuery.getSingleResult();
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
@@ -71,6 +71,6 @@ public class PlayerDAO {
             return Optional.empty();
         }
         entityManager.close();
-        return Optional.ofNullable(players.getFirst());
+        return Optional.ofNullable(player);
     }
 }

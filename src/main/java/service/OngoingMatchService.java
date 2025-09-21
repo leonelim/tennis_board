@@ -2,7 +2,6 @@ package service;
 
 import dao.MatchDAO;
 import dao.PlayerDAO;
-import dto.OngoingMatchDTO;
 import model.entity.Match;
 import model.entity.Player;
 import model.nonpersistent.OngoingMatch;
@@ -31,6 +30,10 @@ public class OngoingMatchService {
     }
 
     public void createMatchAndSaveToMemory(UUID uuid, String name1, String name2) {
+        name1 = name1.replace("<", "&lt;").replace(">", "&gt;")
+                .replace("&", "&amp;");
+        name2 = name2.replace("<", "&lt;").replace(">", "&gt;")
+                .replace("&", "&amp;");
         String[] names = {name1, name2};
         OngoingMatch ongoingMatch = new OngoingMatch();
         ongoingMatch.setScore1(new PlayerScore());
@@ -47,7 +50,7 @@ public class OngoingMatchService {
         ongoingMatches.put(uuid, ongoingMatch);
     }
 
-    public void persistMatch(OngoingMatch ongoingMatch, Player winner, UUID uuid) {
+    public void persistMatchAndRemoveFromMemory(OngoingMatch ongoingMatch, Player winner) {
         Match match = new Match();
         match.setPlayer1(ongoingMatch.getPlayer1());
         match.setPlayer2(ongoingMatch.getPlayer2());

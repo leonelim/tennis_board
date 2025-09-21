@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="/TennisBoard/css/style.css">
 </head>
 <body>
+    <a href="/TennisBoard"><p>Go to main page</p></a>
+    <a href="/TennisBoard/new-match"><p>Start new match</p></a>
     <a href="/TennisBoard/matches?page=1&filter_by_name=1"><p>finished matches</p></a>
     <form action="/TennisBoard/new-match" method="post">
         <label for="name1">name 1: </label>

@@ -11,6 +11,7 @@ import service.MatchScoreCalculationService;
 import service.OngoingMatchService;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @WebServlet("/match-score")
@@ -39,7 +40,12 @@ public class MatchScoreController extends HttpServlet {
         String uuidStr = req.getParameter("uuid");
         UUID uuid = UUID.fromString(uuidStr);
         int pointWinnerId = Integer.parseInt(req.getParameter("point_winner_id"));
-        matchScoreCalculatorService.calculatePoints(uuid, pointWinnerId);
-        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
+        if (Objects.equals(req.getParameter("end_game"), "true")) {
+            matchScoreCalculatorService.endGame(uuid, pointWinnerId);
+            resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
+        } else {
+            matchScoreCalculatorService.calculatePoints(uuid, pointWinnerId);
+            resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
+        }
     }
 }

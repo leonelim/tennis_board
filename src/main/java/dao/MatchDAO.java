@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transaction;
 import model.entity.Match;
 import util.PersistenceUtil;
 
@@ -54,5 +55,23 @@ public class MatchDAO {
         }
         entityManager.close();
         return matches;
+    }
+    public Long countEntries() {
+        EntityManager entityManager = PersistenceUtil.getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            entityManager.getTransaction().begin();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Match> root = criteriaQuery.from(Match.class);
+            criteriaQuery.select(criteriaBuilder.count(root));
+            TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+            return typedQuery.getSingleResult();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+        return 0L;
     }
 }
