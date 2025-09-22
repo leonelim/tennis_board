@@ -7,7 +7,7 @@
 <body>
     <a href="/TennisBoard"><p>Go to main page</p></a>
     <a href="/TennisBoard/new-match"><p>Start new match</p></a>
-    <a href="/TennisBoard/matches?page=1&filter_by_name=1"><p>finished matches</p></a>
+    <a href="/TennisBoard/matches?page=1"><p>finished matches</p></a>
     <p>
         ${match.getPlayer1().getName()} ${match.getScore1().getPoints()} ${match.getScore1().getGames()} ${match.getScore1().getSets()}
         <form action="/TennisBoard/match-score" method="post">

@@ -21,9 +21,10 @@ public class FinishedMatchesController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int pageNumber = Integer.parseInt(req.getParameter("page"));
-        String filterByPlayerName = req.getParameter("filter_by_player_name");
-        List<Match> matches = finishedMatchesPersistenceService.getMatches(pageNumber);
-        Long amount = finishedMatchesPersistenceService.getAmount();
+        String playerName = req.getParameter("filter_by_player_name");
+        req.setAttribute("playerName", playerName);
+        List<Match> matches = finishedMatchesPersistenceService.getMatches(pageNumber, playerName);
+        Long amount = finishedMatchesPersistenceService.getAmount(playerName);
         logger.warn(matches.isEmpty());
         req.setAttribute("matches", matches);
         req.setAttribute("amount", amount);
