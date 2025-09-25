@@ -69,8 +69,9 @@ public class MatchDAO {
     public Long countEntries(String name) {
         EntityManager entityManager = PersistenceUtil.getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+        Long amount = null;
         try {
-            entityManager.getTransaction().begin();
+            transaction.begin();
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
             Root<Match> root = criteriaQuery.from(Match.class);
@@ -81,7 +82,8 @@ public class MatchDAO {
             }
             criteriaQuery.select(criteriaBuilder.count(root));
             TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
-            return typedQuery.getSingleResult();
+            amount = typedQuery.getSingleResult();
+            transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -89,6 +91,6 @@ public class MatchDAO {
         } finally {
             entityManager.close();
         }
-        return 0L;
+        return amount;
     }
 }
